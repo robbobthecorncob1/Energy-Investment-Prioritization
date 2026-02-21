@@ -13,25 +13,28 @@ meter_df = pd.concat([meter_sept, meter_oct], ignore_index=True)
 del meter_sept
 del meter_oct
 
-buildingAndMeter_df = pd.merge(meter_df, building_df, left_on="simscode", right_on="buildingnumber", how="left")
-buildingAndMeter_df["join_date"] = buildingAndMeter_df["readingtime"].dt.normalize()
+elecMeter_df = meter_df[meter_df["utility"] == "ELECTRICITY"].copy()
+elecMeter_df["hourly_est_kwh"] = elecMeter_df["readingvalue"] * 4
 
-allData_df = pd.merge(buildingAndMeter_df, weather_df, left_on="join_date", right_on="date", how="left")
-allData_df = allData_df.drop(columns=["join_date"])
-
-elec_df = allData_df[allData_df["utility"] == "ELECTRICITY"].copy()
-elec_df["hour_timestamp"] = elec_df["readingtime"].dt.floor("h")
+elecMeter_df["hour_timestamp"] = elecMeter_df["readingtime"].dt.floor("h")
+weather_df["hour_timestamp"] = weather_df["date"].dt.floor("h")
+weatherAndElec = pd.merge(elecMeter_df, weather_df, on="hour_timestamp", how="left")
+allData_df = pd.merge(weatherAndElec, building_df, left_on="simscode", right_on="buildingnumber", how="left")
 
 # Group by building and hour, then aggregate the necessary columns
-hourly_df = elec_df.groupby(["simscode", "hour_timestamp"]).agg({
-    "readingvalue": "sum",
+clean_df = allData_df.groupby(["simscode", "hour_timestamp"]).agg({
+    "hourly_est_kwh": "mean",
     "grossarea": "first",
     "constructiondate": "first",
     "temperature_2m": "mean"
 }).reset_index()
 
-hourly_df["energyuseintensity"] = hourly_df["readingvalue"] / hourly_df["grossarea"]
-print(f"Done")
+clean_df["energyuseintensity"] = clean_df["hourly_est_kwh"] / clean_df["grossarea"]
+clean_df["hour_of_day"] = clean_df["hour_timestamp"].dt.hour
+clean_df["day_of_week"] = clean_df["hour_timestamp"].dt.dayofweek
+clean_df["is_weekend"] = clean_df["day_of_week"].apply(lambda x: 1 if x >= 5 else 0)
 
-hourly_df.to_csv("processed/hourly_electricity_cleaned.csv", index=False)
+print(f"Done!")
+
+clean_df.to_csv("processed/hourly_electricity_cleaned.csv", index=False)
 print(f"Cleaned data saved to \"processed/hourly_electricity_cleaned.csv!\"")
