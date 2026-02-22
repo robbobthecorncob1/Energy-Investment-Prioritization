@@ -16,13 +16,17 @@ Strategic Energy Investment Prioritization path for HackAI 2026
 ### Execution Steps
 
 1. Create and Activate Environment:
+
 python3 -m venv my_env
 source my_env/bin/activate
 2. Install Dependencies
+
 pip install -r requirements.txt
 3. Run the Pipeline (see Project Architecture for more information):
+
 python run_pipeline.py
 4. Launch the Dashboard:
+
 streamlit run app.py
 
 ## HackAI 2026
