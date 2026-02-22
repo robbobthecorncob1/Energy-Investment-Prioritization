@@ -3,4 +3,6 @@
 my_env/
 my_env/*
 data/*
+!data/.gitkeep
 processed/*
+!processed/.gitkeep
