@@ -72,4 +72,5 @@ app.py: An interactive Streamlit dashboard for non-technical stakeholders to ins
 ## Author
 
 **Adam Hilty**
-GitHub [robbobthecorncob1](https://github.com/robbobthecorncob1)
+GitHub [robbobthecorncob1](https://github.com/robbobthecorncob1) (School)
+GitHub [bigred225](https://github.com/bigred225) (Personal)
