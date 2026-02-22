@@ -26,7 +26,7 @@ df = load_data()
 st.title("🏛️ OSU Smart Capital Planner: AI-Driven Energy Investment")
 st.markdown("""
 **The Challenge:** If you have limited capital funding, which buildings should get energy retrofits first?  
-**Our Approach:** We trained an XGBoost Machine Learning model on campus-wide data to establish a "fair baseline" for energy use based on weather, time, and building size. We then isolated buildings that consistently deviate from this baseline, ranking them by persistent inefficiency, erratic control systems, and nighttime waste.
+**Our Approach:** I trained an XGBoost Machine Learning model on campus-wide data to establish a "fair baseline" for energy use based on weather, time, and building size. I then isolated buildings that consistently deviate from this baseline, ranking them by persistent inefficiency, erratic control systems, and nighttime waste.
 """)
 st.divider()
 
